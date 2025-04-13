@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Box, GitBranch, LineChart, MessagesSquare, Sparkles, Database, Brain, Wrench, CheckCircle, AlertCircle, Code, Braces, Zap, Star, Lightbulb, MousePointer, ExternalLink, Info } from "lucide-react";
+import { ArrowRight, BookOpen, Box, GitBranch, LineChart, MessagesSquare, Sparkles, Database, Brain, Wrench, CheckCircle, AlertCircle, Code, Braces, Zap, Star, Lightbulb, MousePointer, ExternalLink, Info, ChevronUp, ChevronDown } from "lucide-react";
 import Header from "@/components/Header";
 import TechCard from "@/components/TechCard";
 import CodeSnippet from "@/components/CodeSnippet";
