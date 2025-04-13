@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Box, GitBranch, LineChart, MessagesSquare, Sparkles, Database, Brain, Wrench, CheckCircle, AlertCircle, Code, Braces } from "lucide-react";
+import { ArrowRight, BookOpen, Box, GitBranch, LineChart, MessagesSquare, Sparkles, Database, Brain, Wrench, CheckCircle, AlertCircle, Code, Braces, Zap, Star, Lightbulb, MousePointer, ExternalLink, Info } from "lucide-react";
 import Header from "@/components/Header";
 import TechCard from "@/components/TechCard";
 import CodeSnippet from "@/components/CodeSnippet";
@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const installationCode = `pip install langchain langchain-openai langchain-community langgraph langsmith`;
 
@@ -359,6 +360,24 @@ export default function Index() {
     agentGuide: false,
     resources: false
   });
+  
+  const [expandedSections, setExpandedSections] = useState({
+    rapidDevelopment: false,
+    modularArchitecture: false,
+    modelAgnostic: false,
+    observability: false,
+    hallucinations: false,
+    promptEngineering: false,
+    debugging: false,
+    costManagement: false
+  });
+
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section as keyof typeof prev]
+    }));
+  };
 
   useEffect(() => {
     const observerOptions = {
@@ -475,55 +494,204 @@ export default function Index() {
           </div>
           
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="hover-lift animate-slide-in-left" style={{animationDelay: '0.7s'}}>
+            <Card className="hover-lift animate-slide-in-left bg-card text-card-foreground" style={{animationDelay: '0.7s'}}>
               <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary animate-pulse-slow" />
                   Key Benefits
                 </h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span><strong>Rapid Development</strong>: Build complex LLM applications in days instead of months</span>
+                <ul className="space-y-3">
+                  <li>
+                    <Collapsible open={expandedSections.rapidDevelopment}>
+                      <CollapsibleTrigger 
+                        className="flex items-start gap-2 w-full text-left cursor-pointer hover:bg-muted/40 p-2 rounded-md transition-colors"
+                        onClick={() => toggleSection('rapidDevelopment')}
+                      >
+                        <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="font-medium">Rapid Development</span>
+                          {expandedSections.rapidDevelopment ? 
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" /> : 
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          }
+                        </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pl-7 pr-2 pt-2 text-muted-foreground animate-fade-in">
+                        Build complex LLM applications in days instead of months with pre-built components, templates,
+                        and integration patterns. Save development time by leveraging the ecosystem's standardized interfaces.
+                      </CollapsibleContent>
+                    </Collapsible>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span><strong>Modular Architecture</strong>: Swap components without rewriting your entire application</span>
+                  
+                  <li>
+                    <Collapsible open={expandedSections.modularArchitecture}>
+                      <CollapsibleTrigger 
+                        className="flex items-start gap-2 w-full text-left cursor-pointer hover:bg-muted/40 p-2 rounded-md transition-colors"
+                        onClick={() => toggleSection('modularArchitecture')}
+                      >
+                        <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="font-medium">Modular Architecture</span>
+                          {expandedSections.modularArchitecture ? 
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" /> : 
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          }
+                        </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pl-7 pr-2 pt-2 text-muted-foreground animate-fade-in">
+                        Swap components without rewriting your entire application. Change LLM providers, 
+                        memory implementations, or tools with minimal code changes. This flexibility allows 
+                        for rapid experimentation and optimization.
+                      </CollapsibleContent>
+                    </Collapsible>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span><strong>Model Agnostic</strong>: Use any LLM provider (OpenAI, Anthropic, Llama, etc.)</span>
+                  
+                  <li>
+                    <Collapsible open={expandedSections.modelAgnostic}>
+                      <CollapsibleTrigger 
+                        className="flex items-start gap-2 w-full text-left cursor-pointer hover:bg-muted/40 p-2 rounded-md transition-colors"
+                        onClick={() => toggleSection('modelAgnostic')}
+                      >
+                        <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="font-medium">Model Agnostic</span>
+                          {expandedSections.modelAgnostic ? 
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" /> : 
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          }
+                        </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pl-7 pr-2 pt-2 text-muted-foreground animate-fade-in">
+                        Use any LLM provider (OpenAI, Anthropic, Llama, etc.) with the same application logic.
+                        Switch between different models to find the best balance of cost, performance, and capabilities
+                        for your specific use case.
+                      </CollapsibleContent>
+                    </Collapsible>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span><strong>Observability</strong>: Debug and optimize your applications with powerful tracing</span>
+                  
+                  <li>
+                    <Collapsible open={expandedSections.observability}>
+                      <CollapsibleTrigger 
+                        className="flex items-start gap-2 w-full text-left cursor-pointer hover:bg-muted/40 p-2 rounded-md transition-colors"
+                        onClick={() => toggleSection('observability')}
+                      >
+                        <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="font-medium">Observability</span>
+                          {expandedSections.observability ? 
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" /> : 
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          }
+                        </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pl-7 pr-2 pt-2 text-muted-foreground animate-fade-in">
+                        Debug and optimize your applications with powerful tracing through LangSmith.
+                        Understand exactly why your LLM applications behave the way they do, track costs,
+                        and identify performance bottlenecks or reasoning failures.
+                      </CollapsibleContent>
+                    </Collapsible>
                   </li>
                 </ul>
               </CardContent>
             </Card>
             
-            <Card className="hover-lift animate-slide-in-right" style={{animationDelay: '0.7s'}}>
+            <Card className="hover-lift animate-slide-in-right bg-card text-card-foreground" style={{animationDelay: '0.7s'}}>
               <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-primary" />
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <AlertCircle className="h-5 w-5 text-primary animate-pulse-slow" />
                   Common Challenges
                 </h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
-                    <span><strong>Hallucinations</strong>: LLMs can generate incorrect information that sounds plausible</span>
+                <ul className="space-y-3">
+                  <li>
+                    <Collapsible open={expandedSections.hallucinations}>
+                      <CollapsibleTrigger 
+                        className="flex items-start gap-2 w-full text-left cursor-pointer hover:bg-muted/40 p-2 rounded-md transition-colors"
+                        onClick={() => toggleSection('hallucinations')}
+                      >
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="font-medium">Hallucinations</span>
+                          {expandedSections.hallucinations ? 
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" /> : 
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          }
+                        </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pl-7 pr-2 pt-2 text-muted-foreground animate-fade-in">
+                        LLMs can generate incorrect information that sounds plausible. Use techniques like
+                        Retrieval Augmented Generation (RAG) and fact-checking tools to minimize this risk.
+                        LangChain provides tools to ground responses in reliable sources.
+                      </CollapsibleContent>
+                    </Collapsible>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
-                    <span><strong>Prompt Engineering</strong>: Creating effective prompts requires expertise and experimentation</span>
+                  
+                  <li>
+                    <Collapsible open={expandedSections.promptEngineering}>
+                      <CollapsibleTrigger 
+                        className="flex items-start gap-2 w-full text-left cursor-pointer hover:bg-muted/40 p-2 rounded-md transition-colors"
+                        onClick={() => toggleSection('promptEngineering')}
+                      >
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="font-medium">Prompt Engineering</span>
+                          {expandedSections.promptEngineering ? 
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" /> : 
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          }
+                        </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pl-7 pr-2 pt-2 text-muted-foreground animate-fade-in">
+                        Creating effective prompts requires expertise and experimentation. LangChain offers prompt
+                        templates and optimization tools through LangSmith to help iterate and improve your prompts
+                        more quickly based on real performance data.
+                      </CollapsibleContent>
+                    </Collapsible>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
-                    <span><strong>Debugging</strong>: Understanding why an LLM application fails can be difficult</span>
+                  
+                  <li>
+                    <Collapsible open={expandedSections.debugging}>
+                      <CollapsibleTrigger 
+                        className="flex items-start gap-2 w-full text-left cursor-pointer hover:bg-muted/40 p-2 rounded-md transition-colors"
+                        onClick={() => toggleSection('debugging')}
+                      >
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="font-medium">Debugging</span>
+                          {expandedSections.debugging ? 
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" /> : 
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          }
+                        </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pl-7 pr-2 pt-2 text-muted-foreground animate-fade-in">
+                        Understanding why an LLM application fails can be difficult. LangSmith's tracing capabilities
+                        make complex chains and agents transparent by showing each step of reasoning, each tool call,
+                        and each intermediate output in a visual debugging interface.
+                      </CollapsibleContent>
+                    </Collapsible>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
-                    <span><strong>Cost Management</strong>: API costs can escalate quickly with complex applications</span>
+                  
+                  <li>
+                    <Collapsible open={expandedSections.costManagement}>
+                      <CollapsibleTrigger 
+                        className="flex items-start gap-2 w-full text-left cursor-pointer hover:bg-muted/40 p-2 rounded-md transition-colors"
+                        onClick={() => toggleSection('costManagement')}
+                      >
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="font-medium">Cost Management</span>
+                          {expandedSections.costManagement ? 
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" /> : 
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          }
+                        </div>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pl-7 pr-2 pt-2 text-muted-foreground animate-fade-in">
+                        API costs can escalate quickly with complex applications. LangChain helps optimize usage
+                        with caching mechanisms and token counting, while LangSmith provides detailed cost analysis
+                        to identify expensive components and optimize them.
+                      </CollapsibleContent>
+                    </Collapsible>
                   </li>
                 </ul>
               </CardContent>
@@ -543,32 +711,106 @@ export default function Index() {
           
           <ComparisonTable />
           
-          <div className="mt-12 p-6 border rounded-lg bg-card animate-zoom-in">
-            <h3 className="text-xl font-bold mb-4">Key Takeaways</h3>
-            <ul className="list-disc pl-6 space-y-2">
-              <li><strong>LangChain</strong> is your foundation for building LLM applications with reusable components</li>
-              <li><strong>LangGraph</strong> extends LangChain when you need stateful, complex agent workflows</li>
-              <li><strong>LangSmith</strong> helps you debug, monitor, and improve your applications, regardless of whether you're using LangChain or LangGraph</li>
-              <li>All three can be used together for the most powerful and maintainable agent systems</li>
+          <div className="mt-12 p-6 border rounded-lg bg-card animate-zoom-in shadow-md">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary animate-pulse-slow" />
+              Key Takeaways
+            </h3>
+            <ul className="list-none pl-1 space-y-4 text-card-foreground">
+              <li className="flex items-start gap-3 p-3 hover:bg-muted/30 rounded-lg transition-colors duration-300 cursor-pointer">
+                <div className="bg-primary/10 p-2 rounded-full">
+                  <Star className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <strong className="text-lg">LangChain</strong> is your foundation for building LLM applications with reusable components
+                  <div className="mt-1 text-sm text-muted-foreground flex items-center gap-1">
+                    <Info className="h-3.5 w-3.5" />
+                    <span>Perfect for individual agents and basic applications</span>
+                  </div>
+                </div>
+              </li>
+              
+              <li className="flex items-start gap-3 p-3 hover:bg-muted/30 rounded-lg transition-colors duration-300 cursor-pointer">
+                <div className="bg-primary/10 p-2 rounded-full">
+                  <Lightbulb className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <strong className="text-lg">LangGraph</strong> extends LangChain when you need stateful, complex agent workflows
+                  <div className="mt-1 text-sm text-muted-foreground flex items-center gap-1">
+                    <Info className="h-3.5 w-3.5" />
+                    <span>Enable multi-agent systems with sophisticated state management</span>
+                  </div>
+                </div>
+              </li>
+              
+              <li className="flex items-start gap-3 p-3 hover:bg-muted/30 rounded-lg transition-colors duration-300 cursor-pointer">
+                <div className="bg-primary/10 p-2 rounded-full">
+                  <MousePointer className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <strong className="text-lg">LangSmith</strong> helps you debug, monitor, and improve your applications
+                  <div className="mt-1 text-sm text-muted-foreground flex items-center gap-1">
+                    <Info className="h-3.5 w-3.5" />
+                    <span>Works with both LangChain and LangGraph for complete visibility</span>
+                  </div>
+                </div>
+              </li>
+              
+              <li className="flex items-start gap-3 p-3 hover:bg-muted/30 rounded-lg transition-colors duration-300 cursor-pointer">
+                <div className="bg-primary/10 p-2 rounded-full">
+                  <Code className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <strong className="text-lg">Combined Ecosystem</strong> provides the most powerful and maintainable agent systems
+                  <div className="mt-1 text-sm text-muted-foreground flex items-center gap-1">
+                    <Info className="h-3.5 w-3.5" />
+                    <span>Leverage all three technologies for production-grade applications</span>
+                  </div>
+                </div>
+              </li>
             </ul>
             
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="p-4 hover-lift flex flex-col items-center text-center">
-                <Database className="h-8 w-8 text-primary mb-2" />
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="p-4 hover-lift flex flex-col items-center text-center hover:border-primary/30 transition-colors duration-300 hover:bg-primary/5 cursor-pointer">
+                <div className="bg-primary/10 p-2 rounded-full mb-2">
+                  <Database className="h-8 w-8 text-primary" />
+                </div>
                 <h4 className="font-medium">Start with LangChain</h4>
-                <p className="text-sm text-muted-foreground">For simple applications and individual agents</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  For simple applications and individual agents that need basic LLM interactions and tool use.
+                </p>
+                <Button variant="link" size="sm" className="mt-2" onClick={() => window.open("https://python.langchain.com/docs/get_started", "_blank")}>
+                  <span>Learn More</span>
+                  <ExternalLink className="h-3 w-3 ml-1" />
+                </Button>
               </Card>
               
-              <Card className="p-4 hover-lift flex flex-col items-center text-center">
-                <Braces className="h-8 w-8 text-primary mb-2" />
+              <Card className="p-4 hover-lift flex flex-col items-center text-center hover:border-primary/30 transition-colors duration-300 hover:bg-primary/5 cursor-pointer">
+                <div className="bg-primary/10 p-2 rounded-full mb-2">
+                  <Braces className="h-8 w-8 text-primary" />
+                </div>
                 <h4 className="font-medium">Add LangGraph</h4>
-                <p className="text-sm text-muted-foreground">When you need complex state management and workflows</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  When you need complex state management, multi-agent systems, and sophisticated workflows.
+                </p>
+                <Button variant="link" size="sm" className="mt-2" onClick={() => window.open("https://python.langchain.com/docs/langgraph", "_blank")}>
+                  <span>Learn More</span>
+                  <ExternalLink className="h-3 w-3 ml-1" />
+                </Button>
               </Card>
               
-              <Card className="p-4 hover-lift flex flex-col items-center text-center">
-                <Brain className="h-8 w-8 text-primary mb-2" />
+              <Card className="p-4 hover-lift flex flex-col items-center text-center hover:border-primary/30 transition-colors duration-300 hover:bg-primary/5 cursor-pointer">
+                <div className="bg-primary/10 p-2 rounded-full mb-2">
+                  <Brain className="h-8 w-8 text-primary" />
+                </div>
                 <h4 className="font-medium">Use LangSmith</h4>
-                <p className="text-sm text-muted-foreground">Throughout development for debugging and monitoring</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Throughout development for debugging, evaluating, and monitoring your LLM applications.
+                </p>
+                <Button variant="link" size="sm" className="mt-2" onClick={() => window.open("https://smith.langchain.com/", "_blank")}>
+                  <span>Learn More</span>
+                  <ExternalLink className="h-3 w-3 ml-1" />
+                </Button>
               </Card>
             </div>
           </div>
