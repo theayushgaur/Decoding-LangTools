@@ -1,5 +1,4 @@
-
-import { ArrowRight, BookOpen, Box, GitBranch, LineChart, MessagesSquare, Sparkles, Database, Brain, Tool, CheckCircle, AlertCircle, Code, Braces } from "lucide-react";
+import { ArrowRight, BookOpen, Box, GitBranch, LineChart, MessagesSquare, Sparkles, Database, Brain, Wrench, CheckCircle, AlertCircle, Code, Braces } from "lucide-react";
 import Header from "@/components/Header";
 import TechCard from "@/components/TechCard";
 import CodeSnippet from "@/components/CodeSnippet";
@@ -11,7 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 
-// Code snippets
 const installationCode = `pip install langchain langchain-openai langchain-community langgraph langsmith`;
 
 const basicAgentCode = `from langchain_core.prompts import ChatPromptTemplate
@@ -118,7 +116,6 @@ result = process_user_query("Explain how LangSmith helps with debugging")
 print(result)
 `;
 
-// Advanced examples
 const advancedAgentCode = `from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor
 from langchain.agents.format_scratchpad import format_to_openai_function_messages
@@ -276,7 +273,6 @@ for message in result["messages"]:
         print(message.content)
         print("-" * 50)`;
 
-// Advanced LangSmith usage
 const advancedLangSmithCode = `import os
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
@@ -364,7 +360,6 @@ export default function Index() {
     resources: false
   });
 
-  // Intersection Observer for animations
   useEffect(() => {
     const observerOptions = {
       root: null,
@@ -396,7 +391,6 @@ export default function Index() {
     <div className="min-h-screen flex flex-col">
       <Header />
       
-      {/* Hero Section */}
       <section className="py-20 bg-gradient-to-b from-secondary/40 to-background transition-colors duration-300">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center text-center space-y-4 md:space-y-6 max-w-3xl mx-auto">
@@ -418,7 +412,6 @@ export default function Index() {
         </div>
       </section>
       
-      {/* Overview Section */}
       <section id="overview" className={`py-16 md:py-24 transition-colors duration-300 ${isVisible.overview ? 'animate-fade-in' : 'opacity-0'}`}>
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center text-center mb-12">
@@ -481,7 +474,6 @@ export default function Index() {
             />
           </div>
           
-          {/* Additional Info */}
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card className="hover-lift animate-slide-in-left" style={{animationDelay: '0.7s'}}>
               <CardContent className="p-6">
@@ -540,7 +532,6 @@ export default function Index() {
         </div>
       </section>
       
-      {/* Comparison Section */}
       <section id="comparison" className={`py-16 md:py-24 bg-muted/30 transition-colors duration-300 ${isVisible.comparison ? 'animate-fade-in' : 'opacity-0'}`}>
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center text-center mb-12">
@@ -584,7 +575,6 @@ export default function Index() {
         </div>
       </section>
       
-      {/* Agent Guide Section */}
       <section id="agent-guide" className={`py-16 md:py-24 transition-colors duration-300 ${isVisible.agentGuide ? 'animate-fade-in' : 'opacity-0'}`}>
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center text-center mb-12">
@@ -611,7 +601,7 @@ export default function Index() {
               </p>
               <div className="mt-4 p-4 bg-secondary/30 rounded-lg border border-secondary">
                 <h4 className="font-medium mb-2 flex items-center gap-2">
-                  <Tool className="h-5 w-5" />
+                  <Wrench className="h-5 w-5" />
                   API Keys Setup
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -833,7 +823,6 @@ export default function Index() {
         </div>
       </section>
       
-      {/* Resources Section */}
       <section id="resources" className={`py-16 md:py-24 bg-muted/30 transition-colors duration-300 ${isVisible.resources ? 'animate-fade-in' : 'opacity-0'}`}>
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center text-center mb-12">
@@ -933,7 +922,6 @@ export default function Index() {
         </div>
       </section>
       
-      {/* Footer */}
       <footer className="py-6 md:py-8 border-t transition-colors duration-300">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">

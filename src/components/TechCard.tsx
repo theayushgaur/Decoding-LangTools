@@ -9,13 +9,15 @@ interface TechCardProps {
   keyFeatures: string[];
   icon: React.ReactNode;
   learnMoreUrl: string;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export default function TechCard({ title, description, keyFeatures, icon, learnMoreUrl }: TechCardProps) {
+export default function TechCard({ title, description, keyFeatures, icon, learnMoreUrl, className, style }: TechCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Card className="transition-all duration-300 hover:shadow-lg border border-border/60 h-full">
+    <Card className={`transition-all duration-300 hover:shadow-lg border border-border/60 h-full ${className || ''}`} style={style}>
       <CardHeader className="space-y-1">
         <div className="flex items-center space-x-2">
           <div className="text-primary h-8 w-8">
