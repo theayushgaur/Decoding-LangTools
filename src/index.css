@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -80,11 +81,11 @@
   }
   
   .code-block {
-    @apply bg-muted rounded-lg p-4 overflow-x-auto text-sm font-mono;
+    @apply bg-muted rounded-lg p-3 md:p-4 overflow-x-auto text-xs md:text-sm font-mono;
   }
   
   .terminal-code {
-    @apply font-mono text-sm bg-[#1A1A1A] rounded-lg overflow-hidden;
+    @apply font-mono text-xs md:text-sm bg-[#1A1A1A] rounded-lg overflow-hidden;
   }
   
   .terminal-success {
@@ -104,7 +105,7 @@
   }
   
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
@@ -115,7 +116,7 @@
   
   @keyframes float {
     0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
     100% { transform: translateY(0px); }
   }
   
@@ -125,7 +126,7 @@
   
   @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+    50% { opacity: 0.8; }
   }
   
   .animate-slide-in-left {
@@ -133,7 +134,7 @@
   }
   
   @keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-30px); }
+    from { opacity: 0; transform: translateX(-20px); }
     to { opacity: 1; transform: translateX(0); }
   }
   
@@ -142,16 +143,16 @@
   }
   
   @keyframes slideInRight {
-    from { opacity: 0; transform: translateX(30px); }
+    from { opacity: 0; transform: translateX(20px); }
     to { opacity: 1; transform: translateX(0); }
   }
   
   .animate-zoom-in {
-    animation: zoomIn 0.5s ease-out forwards;
+    animation: zoomIn 0.4s ease-out forwards;
   }
   
   @keyframes zoomIn {
-    from { opacity: 0; transform: scale(0.95); }
+    from { opacity: 0; transform: scale(0.97); }
     to { opacity: 1; transform: scale(1); }
   }
   
@@ -161,7 +162,7 @@
   }
   
   .hover-lift:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
   }
   
   .hover-shine {

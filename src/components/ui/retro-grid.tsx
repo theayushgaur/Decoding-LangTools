@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export interface RetroGridProps extends React.HTMLAttributes<HTMLDivElement> {
   gridOpacity?: number;
@@ -12,13 +13,16 @@ const RetroGrid = ({
   children,
   ...props
 }: RetroGridProps) => {
+  const isMobile = useIsMobile();
+  const gridSize = isMobile ? "30px" : "40px";
+  
   return (
     <div className={`relative overflow-hidden ${className}`} {...props}>
       <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `linear-gradient(to right, var(--primary) ${gridOpacity}px, transparent ${gridOpacity}px), linear-gradient(to bottom, var(--primary) ${gridOpacity}px, transparent ${gridOpacity}px)`,
-          backgroundSize: "40px 40px",
+          backgroundSize: gridSize,
           backgroundPosition: "center center",
           opacity: gridOpacity,
         }}
