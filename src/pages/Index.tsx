@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { ArrowRight, BookOpen, GitBranch, LineChart, MessagesSquare, Sparkles, Database, Brain, Wrench, CheckCircle, AlertCircle, Code, Braces, Zap, Star, Lightbulb, MousePointer, ExternalLink, Info, ChevronUp, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronUp, ChevronDown } from "lucide-react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/sections/HeroSection";
 import OverviewSection from "@/components/sections/OverviewSection";
@@ -53,7 +53,7 @@ export default function Index() {
       <HeroSection />
       <OverviewSection isVisible={isVisible.overview} />
       <ComparisonSection isVisible={isVisible.comparison} />
-      <AgentGuideSection isVisible={isVisible} />
+      <AgentGuideSection isVisible={isVisible.agentGuide} />
       <ResourcesSection isVisible={isVisible.resources} />
       <Footer />
     </div>

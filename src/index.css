@@ -84,6 +84,22 @@
     @apply bg-muted rounded-lg p-4 overflow-x-auto text-sm font-mono;
   }
   
+  .terminal-code {
+    @apply font-mono text-sm bg-[#1A1A1A] rounded-lg overflow-hidden;
+  }
+  
+  .terminal-success {
+    @apply text-green-400;
+  }
+  
+  .terminal-info {
+    @apply text-blue-400;
+  }
+  
+  .terminal-command {
+    @apply text-white;
+  }
+  
   .animate-fade-in {
     animation: fadeIn 0.8s ease forwards;
   }

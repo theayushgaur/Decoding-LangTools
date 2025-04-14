@@ -1,4 +1,3 @@
-
 import { MessagesSquare, Box, Wrench } from "lucide-react";
 import StepCard from "@/components/StepCard";
 import CodeSnippet from "@/components/CodeSnippet";
@@ -10,7 +9,7 @@ export default function AgentGuideSection({ isVisible }: { isVisible: boolean })
   return (
     <section 
       id="agent-guide" 
-      className={`py-16 md:py-24 transition-colors duration-300 bg-background/90 ${isVisible.agentGuide ? 'opacity-100' : 'opacity-0'}`}
+      className={`py-16 md:py-24 transition-colors duration-300 bg-background/90 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
     >
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center text-center mb-12">

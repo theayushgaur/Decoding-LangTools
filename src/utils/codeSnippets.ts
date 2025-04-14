@@ -1,344 +1,406 @@
 
-// Collection of code snippets for the agent guide section
 export const codeSnippets = {
-  installationCode: `pip install langchain langchain-openai langchain-community langgraph langsmith`,
+  installationCode: `> pnpm dlx shadcn@latest init
+✓ Preflight checks.
+✓ Verifying framework. Found Next.js.
+✓ Validating Tailwind CSS.
+✓ Validating import alias.
+✓ Writing components.json.
+✓ Checking registry.
+✓ Updating tailwind.config.ts
+✓ Updating app/globals.css
+✓ Installing dependencies.
+i Updated 1 file:
+  - lib/utils.ts
+Success! Project initialization completed.
+You may now add components.`,
+  
+  basicAgentCode: `from langchain.agents import Tool, AgentExecutor, load_tools
+from langchain.agents.format_scratchpad import format_to_openai_function_messages
+from langchain.agents.output_parsers import OpenAIFunctionsAgentOutputParser
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.tools import DuckDuckGoSearchRun
 
-  basicAgentCode: `from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-from langchain.agents import AgentExecutor, create_react_agent
-from langchain_community.tools import DuckDuckGoSearchRun
+# Define the language model
+llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
-# Define the LLM
-llm = ChatOpenAI(model="gpt-3.5-turbo")
+# Define the tools
+search = DuckDuckGoSearchRun()
+tools = [
+    Tool(
+        name="Search",
+        func=search.run,
+        description="useful for when you need to answer questions about current events or the current state of the world"
+    ),
+]
 
-# Define tools
-search_tool = DuckDuckGoSearchRun()
-tools = [search_tool]
-
-# Define the prompt template with the ReAct format
-prompt = ChatPromptTemplate.from_template("""
-You are a helpful assistant. Use the following tools to answer the user's question:
-{tools}
-
-Use the following format:
-Question: the input question
-Thought: you should always think about what to do
-Action: the action to take, should be one of [{tool_names}]
-Action Input: the input to the action
-Observation: the result of the action
-... (this Thought/Action/Action Input/Observation can repeat N times)
-Thought: I now know the final answer
-Final Answer: the final answer to the original user question
-
-Question: {input}
-Thought:
-""")
+# Create the prompt
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant that answers questions."),
+    ("user", "{input}"),
+    MessagesPlaceholder(variable_name="agent_scratchpad"),
+])
 
 # Create the agent
-agent = create_react_agent(llm, tools, prompt)
+agent = {
+    "input": lambda x: x["input"],
+    "agent_scratchpad": lambda x: format_to_openai_function_messages(x["intermediate_steps"])
+} | prompt | llm | OpenAIFunctionsAgentOutputParser()
 
 # Create the agent executor
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 # Run the agent
-agent_executor.invoke({"input": "What is the current stock price of Apple?"})`,
+response = agent_executor.invoke({"input": "What is the latest news about AI?"})
+print(response["output"])`,
+  
+  langGraphAgentCode: `from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_openai import ChatOpenAI
+from langgraph.graph import END, StateGraph
+from langchain_core.tools import tool
+from typing import TypedDict, List, Union, Dict, Annotated, Sequence
 
-  langGraphAgentCode: `from langchain_core.messages import AIMessage, HumanMessage
+# Define the state type
+class AgentState(TypedDict):
+    messages: List[Union[HumanMessage, AIMessage, SystemMessage]]
+    tools_output: str
+
+# Define a tool
+@tool
+def search(query: str) -> str:
+    """Search for information about a topic."""
+    # In a real implementation, this would perform a search
+    return f"Here is information about {query}..."
+
+# Define the nodes in the graph
+def run_llm(state: AgentState):
+    """Run the LLM with the given state."""
+    messages = state["messages"]
+    model = ChatOpenAI(model="gpt-3.5-turbo")
+    response = model.invoke(messages)
+    return {"messages": messages + [response]}
+
+def call_tool(state: AgentState):
+    """Call the tool based on the last message."""
+    last_message = state["messages"][-1]
+    action = "search"  # In a real implementation, parse the action from the message
+    query = "AI advances"  # In a real implementation, parse the query from the message
+    result = search(query)
+    return {"tools_output": result}
+
+def add_tool_result(state: AgentState):
+    """Add the tool result to the messages."""
+    tool_result = state["tools_output"]
+    new_message = AIMessage(content=f"Tool result: {tool_result}")
+    return {"messages": state["messages"] + [new_message]}
+
+# Create the graph
+workflow = StateGraph(AgentState)
+
+# Add the nodes
+workflow.add_node("run_llm", run_llm)
+workflow.add_node("call_tool", call_tool)
+workflow.add_node("add_tool_result", add_tool_result)
+
+# Define the edges
+workflow.add_edge("run_llm", "call_tool")
+workflow.add_edge("call_tool", "add_tool_result")
+workflow.add_edge("add_tool_result", "run_llm")
+
+# Add conditional edges
+def should_continue(state: AgentState) -> str:
+    """Determine whether to continue or end."""
+    last_message = state["messages"][-1]
+    # In a real implementation, check if the LLM wants to use more tools
+    return "call_tool" if "I need more information" in last_message.content else END
+
+workflow.add_conditional_edges("run_llm", should_continue)
+
+# Compile the graph
+app = workflow.compile()
+
+# Run the graph
+inputs = {
+    "messages": [HumanMessage(content="What are the latest developments in AI?")]
+}
+for output in app.stream(inputs):
+    for key, value in output.items():
+        # Process and display the streaming output
+        pass`,
+  
+  multiAgentExample: `from langchain_core.messages import HumanMessage, AIMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
+from typing import Dict, List, Tuple, TypedDict, Annotated, Sequence, Any
+
+# Define agent types
+class Researcher:
+    def __init__(self):
+        self.llm = ChatOpenAI(model="gpt-3.5-turbo")
+    
+    def run(self, state):
+        messages = state["messages"]
+        research_prompt = f"You are a researcher. Research this topic: {messages[-1].content}"
+        response = self.llm.invoke([HumanMessage(content=research_prompt)])
+        return {"research_output": response.content}
+
+class Writer:
+    def __init__(self):
+        self.llm = ChatOpenAI(model="gpt-3.5-turbo")
+    
+    def run(self, state):
+        research = state["research_output"]
+        write_prompt = f"You are a writer. Create content based on this research: {research}"
+        response = self.llm.invoke([HumanMessage(content=write_prompt)])
+        return {"content_output": response.content}
+
+class Editor:
+    def __init__(self):
+        self.llm = ChatOpenAI(model="gpt-3.5-turbo")
+    
+    def run(self, state):
+        content = state["content_output"]
+        edit_prompt = f"You are an editor. Edit and improve this content: {content}"
+        response = self.llm.invoke([HumanMessage(content=edit_prompt)])
+        final_message = AIMessage(content=response.content)
+        return {"messages": state["messages"] + [final_message]}
 
 # Define the state
 class AgentState(TypedDict):
-    messages: List[Union[HumanMessage, AIMessage]]
-    next: str
+    messages: List[HumanMessage | AIMessage]
+    research_output: str
+    content_output: str
 
-# Define the LLM node
-def ai_response(state: AgentState) -> AgentState:
-    llm = ChatOpenAI(model="gpt-3.5-turbo")
-    messages = state["messages"]
-    response = llm.invoke(messages)
-    return {"messages": messages + [response], "next": "human"}
+# Create the multi-agent system
+agents = {
+    "researcher": Researcher(),
+    "writer": Writer(),
+    "editor": Editor()
+}
 
-# Define the human node (in a real app, this would wait for user input)
-def human_response(state: AgentState) -> AgentState:
-    # For demo purposes, we just end after AI responds
-    return {"messages": state["messages"], "next": END}
+# Create the graph
+workflow = StateGraph(AgentState)
 
-# Define conditional routing based on who should respond next
-def router(state: AgentState) -> str:
-    return state["next"]
+# Add nodes
+workflow.add_node("researcher", agents["researcher"].run)
+workflow.add_node("writer", agents["writer"].run)
+workflow.add_node("editor", agents["editor"].run)
 
-# Build the graph
-graph = StateGraph(AgentState)
-graph.add_node("ai", ai_response)
-graph.add_node("human", human_response)
-
-# Add conditional edges
-graph.add_conditional_edges("", router, {"ai": "ai", "human": "human"})
-graph.add_edge("ai", "human")
+# Add edges
+workflow.add_edge("researcher", "writer")
+workflow.add_edge("writer", "editor")
+workflow.add_edge("editor", END)
 
 # Compile the graph
-chain = graph.compile()
+app = workflow.compile()
 
-# Run the conversation
-chain.invoke({
-    "messages": [HumanMessage(content="Tell me about LangGraph")],
-    "next": "ai"
-})`,
-
+# Run the system
+inputs = {
+    "messages": [HumanMessage(content="Tell me about the future of autonomous vehicles.")]
+}
+result = app.invoke(inputs)
+print(result["messages"][-1].content)`,
+  
   langSmithCode: `import os
-from langchain import ChatOpenAI
-from langsmith import traceable
+from langchain import LangChain
+from langsmith import Client
 
 # Set your LangSmith API key
 os.environ["LANGCHAIN_API_KEY"] = "your-langsmith-api-key"
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "my-agent-project"
+os.environ["LANGCHAIN_PROJECT"] = "My Agent Project"
 
-# Trace a function
-@traceable(run_type="chain")
-def process_user_query(query: str) -> str:
-    llm = ChatOpenAI(temperature=0)
-    response = llm.predict(f"User query: {query}. Respond briefly.")
-    return response
+# Initialize LangSmith client
+client = Client()
 
-# Use the function
-result = process_user_query("Explain how LangSmith helps with debugging")
-print(result)
-`,
+# The rest of your agent code would go here...
+# When you run your agent, LangSmith will automatically capture traces
 
-  multiAgentExample: `from langchain_openai import ChatOpenAI
-from langgraph.graph import StateGraph, END
-from langchain_core.messages import HumanMessage, AIMessage
-from typing import Dict, List, TypedDict, Union, Annotated
-import operator
+# You can also create a trace manually
+with client.trace("agent_execution") as trace:
+    # Your agent code here
+    pass`,
+  
+  advancedLangSmithCode: `import os
+from langchain import LangChain
+from langsmith import Client, trace
+from langsmith.evaluation import EvaluationResults, run_evaluator
 
-# Define agent roles
-class AgentState(TypedDict):
-    messages: List[Union[HumanMessage, AIMessage]]
-    next: str
-    
-# Create our LLMs with different system prompts/roles
-researcher_llm = ChatOpenAI(model="gpt-4").bind(
-    system_message="You are a research expert. Your job is to find information and facts. Be thorough and precise."
+# Set your LangSmith API key
+os.environ["LANGCHAIN_API_KEY"] = "your-langsmith-api-key"
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = "Advanced Agent Project"
+
+# Initialize LangSmith client
+client = Client()
+
+# Create a dataset for testing
+dataset = client.create_dataset("test_queries", description="Test queries for my agent")
+
+# Add examples to the dataset
+client.create_example(
+    inputs={"query": "What is the capital of France?"},
+    outputs={"answer": "The capital of France is Paris."},
+    dataset_id=dataset.id
 )
 
-critic_llm = ChatOpenAI(model="gpt-4").bind(
-    system_message="You are a critical thinker. Your job is to analyze information and identify potential inaccuracies or biases."
+# Create a custom evaluator
+@run_evaluator
+def accuracy_evaluator(run, example):
+    """Evaluate if the answer is accurate."""
+    prediction = run.outputs["answer"]
+    reference = example.outputs["answer"]
+    score = 1.0 if prediction.lower() == reference.lower() else 0.0
+    return {"score": score}
+
+# Run evaluation
+evaluation_results = client.run_evaluation(
+    evaluator=accuracy_evaluator,
+    dataset_name="test_queries",
+    llm_or_chain=my_agent,  # Your agent would be defined here
+    project_name="Agent Evaluation"
 )
 
-writer_llm = ChatOpenAI(model="gpt-4").bind(
-    system_message="You are a technical writer. Your job is to synthesize information into clear, concise explanations."
-)
+# Analyze results
+print(f"Average accuracy: {evaluation_results.get_average_score()}")
 
-# Define agent nodes
-def researcher(state: AgentState) -> AgentState:
-    """Research agent finds relevant information."""
-    messages = state["messages"]
-    response = researcher_llm.invoke(messages)
-    updated_messages = messages + [AIMessage(content=f"[Researcher] {response.content}")]
-    return {"messages": updated_messages, "next": "critic"}
+# Add custom metadata to traces
+@trace(name="complex_query_handler")
+def handle_complex_query(query: str):
+    # Your complex query handling logic
+    result = "Processed result"
+    return result`,
+  
+  advancedAgentCode: `import logging
+from langchain.agents import AgentExecutor, create_openai_tools_agent
+from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.memory import ConversationBufferWindowMemory
+from langchain.tools import DuckDuckGoSearchRun, WikipediaQueryRun
+from langchain.tools.retriever import create_retriever_tool
+from langchain.chat_models import ChatOpenAI
+from langchain_community.vectorstores import Chroma
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_core.documents import Document
+from langsmith import Client
+from tenacity import retry, stop_after_attempt, wait_exponential
+import os
 
-def critic(state: AgentState) -> AgentState:
-    """Critic agent evaluates the information."""
-    messages = state["messages"]
-    response = critic_llm.invoke(messages)
-    updated_messages = messages + [AIMessage(content=f"[Critic] {response.content}")]
-    return {"messages": updated_messages, "next": "writer"}
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-def writer(state: AgentState) -> AgentState:
-    """Writer agent produces the final output."""
-    messages = state["messages"]
-    response = writer_llm.invoke(messages)
-    updated_messages = messages + [AIMessage(content=f"[Writer] {response.content}")]
-    return {"messages": updated_messages, "next": END}
+# Initialize LangSmith
+os.environ["LANGCHAIN_API_KEY"] = "your-langsmith-api-key"
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = "Production Agent"
+client = Client()
 
-# Define router for conditional paths
-def router(state: AgentState) -> str:
-    return state["next"]
-
-# Build the multi-agent graph
-workflow = StateGraph(AgentState)
-workflow.add_node("researcher", researcher)
-workflow.add_node("critic", critic)
-workflow.add_node("writer", writer)
-
-# Add conditional edges
-workflow.add_conditional_edges("", router, {
-    "researcher": "researcher",
-    "critic": "critic",
-    "writer": "writer"
-})
-
-# Set standard workflow: researcher → critic → writer
-workflow.add_edge("researcher", "critic")
-workflow.add_edge("critic", "writer")
-
-# Compile the graph
-chain = workflow.compile()
-
-# Example execution
-result = chain.invoke({
-    "messages": [HumanMessage(content="Explain how LangGraph enables multi-agent systems")],
-    "next": "researcher"
-})
-
-for message in result["messages"]:
-    if isinstance(message, AIMessage):
-        print(message.content)
-        print("-" * 50)`,
-
-  advancedAgentCode: `from langchain_openai import ChatOpenAI
-from langchain.agents import AgentExecutor
-from langchain.agents.format_scratchpad import format_to_openai_function_messages
-from langchain.agents.output_parsers import OpenAIFunctionsAgentOutputParser
-from langchain_core.messages import AIMessage, HumanMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_community.tools.tavily_search import TavilySearchResults
-from langchain_community.utilities import SQLDatabase
-from langchain_core.tools import Tool
-
-# More sophisticated LLM
-llm = ChatOpenAI(model="gpt-4-turbo", temperature=0)
-
-# Define multiple tools
-search = TavilySearchResults(max_results=3)
-# Assume we have a SQL database
-db = SQLDatabase.from_uri("sqlite:///data.db")
-
-def run_query(query: str) -> str:
-    """Run a SQL query against the database and return results."""
-    try:
-        return db.run(query)
-    except Exception as e:
-        return f"Error: {str(e)}"
-
-tools = [
-    Tool(
-        name="search",
-        description="Search the web for information",
-        func=search.invoke,
-    ),
-    Tool(
-        name="sql_query",
-        description="Run SQL queries against a database",
-        func=run_query,
-    ),
+# Set up vector database
+documents = [
+    Document(page_content="Important domain knowledge here", metadata={"source": "knowledge_base"}),
+    # Add more documents as needed
 ]
+embeddings = OpenAIEmbeddings()
+vectorstore = Chroma.from_documents(documents, embeddings)
+retriever = vectorstore.as_retriever(
+    search_type="similarity",
+    search_kwargs={"k": 3}
+)
 
-# Advanced agent prompt with better system message and memory management
+# Create tools with error handling
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+def search_with_retry(query):
+    try:
+        search = DuckDuckGoSearchRun()
+        return search.run(query)
+    except Exception as e:
+        logger.error(f"Search error: {e}")
+        return "Sorry, I couldn't perform the search. Please try again."
+
+search_tool = {
+    "name": "Search",
+    "description": "Search the web for information",
+    "func": search_with_retry
+}
+
+knowledge_tool = create_retriever_tool(
+    retriever,
+    "Knowledge Base",
+    "Search the internal knowledge base for information"
+)
+
+wiki_tool = WikipediaQueryRun()
+
+tools = [search_tool, knowledge_tool, wiki_tool]
+
+# Create memory
+memory = ConversationBufferWindowMemory(
+    return_messages=True,
+    memory_key="chat_history",
+    k=5
+)
+
+# Create the prompt
 prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are an expert research agent that can search the web and query databases.
-    Use the tools available to provide comprehensive, accurate answers.
-    Always verify information from multiple sources when possible.
-    If a database query fails, try to reformulate it or explain why it might have failed.
-    For complex questions, break them down into steps and use tools for each step as needed."""),
+    ("system", """You are an advanced AI assistant with access to various tools.
+    Follow these guidelines:
+    1. Use tools appropriately based on the question
+    2. Be concise in your responses
+    3. Cite sources when providing factual information
+    4. If you don't know something, say so
+    5. Prioritize the knowledge base for domain-specific queries
+    """),
     MessagesPlaceholder(variable_name="chat_history"),
     ("human", "{input}"),
     MessagesPlaceholder(variable_name="agent_scratchpad"),
 ])
 
-# Create OpenAI functions agent
-agent = (
-    {
-        "input": lambda x: x["input"],
-        "chat_history": lambda x: x.get("chat_history", []),
-        "agent_scratchpad": lambda x: format_to_openai_function_messages(x.get("intermediate_steps", [])),
-    }
-    | prompt
-    | llm.bind_functions(tools)
-    | OpenAIFunctionsAgentOutputParser()
+# Create LLM with caching
+llm = ChatOpenAI(
+    model="gpt-4-turbo",
+    temperature=0.1,
+    streaming=True,
+    cache=True
 )
 
-# Create agent executor with memory
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
+# Create the agent
+agent = create_openai_tools_agent(llm, tools, prompt)
 
-# Example usage with chat history
-chat_history = [
-    HumanMessage(content="What's the current price of Tesla stock?"),
-    AIMessage(content="As of today, Tesla (TSLA) stock is trading at $177.67 per share, down 0.8% from the previous close.")
-]
+# Create the executor with monitoring
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=tools,
+    memory=memory,
+    verbose=True,
+    return_intermediate_steps=True,
+    max_iterations=5,
+    early_stopping_method="generate",
+    handle_parsing_errors=True
+)
 
-agent_executor.invoke({
-    "input": "How does that compare to its price 3 months ago?",
-    "chat_history": chat_history
-})`,
-
-  advancedLangSmithCode: `import os
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-from langchain.agents import AgentExecutor, create_openai_functions_agent
-from langchain_community.tools.tavily_search import TavilySearchResults
-from langsmith import Client, traceable, trace, RunEvaluator
-
-# Set up environment variables
-os.environ["LANGCHAIN_API_KEY"] = "your-langsmith-api-key"
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "advanced-agent-monitoring"
-
-# Create a LangSmith client
-client = Client()
-
-# Define a custom evaluator
-@traceable
-class FactualityEvaluator(RunEvaluator):
-    """Evaluates factual accuracy of responses."""
+# Example usage with metadata
+def process_query(query, user_id=None, session_id=None):
+    metadata = {
+        "user_id": user_id,
+        "session_id": session_id,
+        "query_type": "customer_service" if "help" in query.lower() else "general"
+    }
     
-    def evaluate_run(self, run):
-        # Get the run output
-        output = run.outputs["output"]
-        
-        # Use an LLM to check factuality
-        llm = ChatOpenAI(temperature=0)
-        prompt = ChatPromptTemplate.from_template(
-            "You are evaluating the factual accuracy of the following statement. "
-            "Rate it from 0 to 10, where 0 means completely inaccurate and 10 means completely accurate. "
-            "Only respond with a number. Statement: {statement}"
-        )
-        chain = prompt | llm
-        score = int(chain.invoke({"statement": output}))
-        
+    try:
+        with client.trace("agent_execution", metadata=metadata) as trace:
+            result = agent_executor.invoke({"input": query})
+            return {
+                "answer": result["output"],
+                "steps": result["intermediate_steps"],
+                "success": True
+            }
+    except Exception as e:
+        logger.error(f"Agent error: {e}")
         return {
-            "score": score / 10,  # Normalize to 0-1
-            "factuality_score": score
-        }
-
-# Create tools and agent
-search = TavilySearchResults()
-tools = [search]
-
-llm = ChatOpenAI(model="gpt-4")
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful assistant. Use tools when needed."),
-    ("human", "{input}")
-])
-agent = create_openai_functions_agent(llm, tools, prompt)
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
-
-# Trace a run with additional metadata
-with trace(
-    name="Advanced Agent with Evaluation",
-    run_type="chain",
-    tags=["production", "factuality-evaluation"],
-    metadata={"version": "1.0.2", "priority": "high"}
-) as run:
-    result = agent_executor.invoke({"input": "What are the latest developments in quantum computing?"})
-    run.outputs = {"output": result["output"]}
-    
-    # Evaluate the run
-    evaluator = FactualityEvaluator()
-    evaluation = evaluator.evaluate_run(run)
-    run.metadata["evaluation"] = evaluation
-    
-    # Add feedback
-    client.create_feedback(
-        run.id,
-        "factuality",
-        evaluation["score"],
-        comment=f"Factuality score: {evaluation['factuality_score']}/10"
-    )
-    
-    print(f"Result: {result['output']}")
-    print(f"Factuality score: {evaluation['factuality_score']}/10")
-    print(f"View run details at: https://smith.langchain.com/runs/{run.id}")`
+            "answer": "I encountered an error while processing your request.",
+            "success": False,
+            "error": str(e)
+        }`
 };
