@@ -1,4 +1,4 @@
-import { MessagesSquare, Box, Wrench } from "lucide-react";
+import { MessagesSquare, Box, Wrench, Smartphone } from "lucide-react";
 import StepCard from "@/components/StepCard";
 import CodeSnippet from "@/components/CodeSnippet";
 
@@ -15,7 +15,7 @@ export default function AgentGuideSection({ isVisible }: { isVisible: boolean })
         <div className="flex flex-col items-center text-center mb-12">
           <h2 className="text-3xl font-bold mb-4 text-foreground">Building Your First Agent</h2>
           <p className="text-lg text-muted-foreground max-w-2xl">
-            Follow this step-by-step guide to create a basic agent using LangChain, and see how to extend it with LangGraph and LangSmith.
+            Follow this step-by-step guide to create a basic agent using LangChain, and see how to extend it with LangGraph, LangSmith, and integrate it with Flutter.
           </p>
         </div>
         
@@ -249,6 +249,124 @@ export default function AgentGuideSection({ isVisible }: { isVisible: boolean })
                     <li>Set up alerts for failures</li>
                     <li>Monitor performance metrics</li>
                     <li>Track usage patterns</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </StepCard>
+          
+          <StepCard 
+            step={6} 
+            title="Integrate with Flutter" 
+            description="Learn how to integrate LangChain agents into Flutter mobile applications."
+            className="hover-lift animate-zoom-in border-primary/20 shadow-md"
+          >
+            <div className="mb-4 p-4 bg-secondary/30 rounded-lg border border-secondary">
+              <h4 className="font-medium mb-2 flex items-center gap-2 text-foreground">
+                <Smartphone className="h-5 w-5 text-primary" />
+                Flutter Setup
+              </h4>
+              <p className="text-sm text-foreground mb-4">
+                First, add the required packages to your Flutter project by updating your <code>pubspec.yaml</code> file:
+              </p>
+              <CodeSnippet 
+                code={codeSnippets.flutterInstallation} 
+                language="yaml" 
+                title="pubspec.yaml dependencies"
+              />
+              <p className="mt-4 text-sm text-foreground">
+                Next, set up your environment variables to securely store your API keys:
+              </p>
+              <CodeSnippet 
+                code={codeSnippets.flutterEnvSetup} 
+                language="bash" 
+                title="Environment Setup"
+              />
+            </div>
+            
+            <div className="mt-6">
+              <h4 className="font-medium mb-2 text-foreground">Basic Agent Implementation</h4>
+              <p className="text-sm text-foreground mb-4">
+                Here's how to implement a basic LangChain agent in your Flutter application:
+              </p>
+              <CodeSnippet 
+                code={codeSnippets.flutterBasicAgent} 
+                language="dart" 
+                title="Basic Flutter Agent"
+              />
+            </div>
+            
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 border rounded-lg hover-lift bg-card text-card-foreground">
+                <h4 className="font-medium mb-2 text-foreground">Project Structure</h4>
+                <p className="text-sm text-foreground mb-2">
+                  A recommended project structure for your Flutter LangChain application:
+                </p>
+                <CodeSnippet 
+                  code={codeSnippets.flutterAppStructure} 
+                  language="text" 
+                  title="Project Structure"
+                />
+              </div>
+              
+              <div className="p-4 border rounded-lg hover-lift bg-card text-card-foreground">
+                <h4 className="font-medium mb-2 text-foreground">Custom Tools</h4>
+                <p className="text-sm text-foreground mb-2">
+                  Create custom tools to extend your agent's capabilities:
+                </p>
+                <CodeSnippet 
+                  code={codeSnippets.flutterCustomTool} 
+                  language="dart" 
+                  title="Custom Web Search Tool"
+                />
+              </div>
+            </div>
+            
+            <div className="mt-6">
+              <h4 className="font-medium mb-2 text-foreground">Advanced Flutter Agent</h4>
+              <p className="text-sm text-foreground mb-4">
+                Here's a more advanced implementation with tools and a chat-like UI:
+              </p>
+              <CodeSnippet 
+                code={codeSnippets.flutterAdvancedAgent} 
+                language="dart" 
+                title="Advanced Flutter Agent"
+              />
+            </div>
+            
+            <div className="mt-6 p-4 border border-primary/20 rounded-lg bg-primary/5">
+              <h4 className="font-medium mb-2 text-foreground">Mobile-Specific Considerations</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="text-foreground">
+                  <h5 className="font-medium">1. Performance</h5>
+                  <ul className="list-disc pl-5 mt-1 space-y-1">
+                    <li>Use streaming responses for better UX</li>
+                    <li>Implement caching to reduce API calls</li>
+                    <li>Handle device offline states gracefully</li>
+                  </ul>
+                </div>
+                <div className="text-foreground">
+                  <h5 className="font-medium">2. UI/UX</h5>
+                  <ul className="list-disc pl-5 mt-1 space-y-1">
+                    <li>Show typing indicators during agent processing</li>
+                    <li>Implement message threading for conversation context</li>
+                    <li>Add pull-to-refresh for updating content</li>
+                  </ul>
+                </div>
+                <div className="text-foreground">
+                  <h5 className="font-medium">3. Security</h5>
+                  <ul className="list-disc pl-5 mt-1 space-y-1">
+                    <li>Never hardcode API keys in your app</li>
+                    <li>Use Flutter's secure storage for sensitive data</li>
+                    <li>Implement proper error handling for API failures</li>
+                  </ul>
+                </div>
+                <div className="text-foreground">
+                  <h5 className="font-medium">4. Battery Usage</h5>
+                  <ul className="list-disc pl-5 mt-1 space-y-1">
+                    <li>Minimize background processing</li>
+                    <li>Batch API requests when possible</li>
+                    <li>Use efficient state management</li>
                   </ul>
                 </div>
               </div>
