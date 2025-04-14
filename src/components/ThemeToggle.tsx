@@ -1,6 +1,5 @@
 
 import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Toggle } from "@/components/ui/toggle";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -17,13 +16,13 @@ export function ThemeToggle() {
             size="sm" 
             pressed={theme === 'dark'} 
             onClick={toggleTheme}
-            className="w-10 h-10 rounded-full transition-all"
+            className="w-10 h-10 rounded-full transition-all hover:bg-primary/10"
             aria-label="Toggle theme"
           >
             {theme === 'dark' ? (
-              <Moon className="h-5 w-5 transition-transform rotate-0 scale-100 dark:rotate-90 dark:scale-0" />
+              <Moon className="h-5 w-5 text-yellow-400 transition-all" />
             ) : (
-              <Sun className="h-5 w-5 transition-transform rotate-90 scale-0 dark:rotate-0 dark:scale-100" />
+              <Sun className="h-5 w-5 text-yellow-500 transition-all" />
             )}
             <span className="sr-only">Toggle theme</span>
           </Toggle>

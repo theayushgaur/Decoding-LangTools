@@ -25,33 +25,33 @@ export default function CodeSnippet({ code, language, title }: CodeSnippetProps)
       return codeStr.split('\n').map((line, index) => {
         // Check if it's a command line (starts with >)
         if (line.trim().startsWith('>')) {
-          return <div key={index} className="text-white">{line}</div>;
+          return <div key={index} className="text-white font-mono">{line}</div>;
         }
         // Check if line indicates success (has ✓)
-        else if (line.trim().includes('✓') || line.trim().startsWith('√')) {
-          return <div key={index} className="text-green-400">✓ {line.replace(/^√\s*/, '')}</div>;
+        else if (line.includes('✓') || line.trim().startsWith('√')) {
+          return <div key={index} className="text-green-400 font-mono">✓ {line.replace(/^√\s*/, '')}</div>;
         }
         // Check if line indicates info (has i or starts with a dash)
         else if (line.trim().startsWith('i') || line.trim().startsWith('-') || line.trim().startsWith('Updated')) {
-          return <div key={index} className="text-blue-400">{line}</div>;
+          return <div key={index} className="text-blue-400 font-mono">{line}</div>;
         }
         // Success message
         else if (line.includes('Success') || line.includes('completed')) {
-          return <div key={index} className="text-white">{line}</div>;
+          return <div key={index} className="text-white font-mono">{line}</div>;
         }
         // Default case
         else {
-          return <div key={index} className="text-white">{line}</div>;
+          return <div key={index} className="text-white font-mono">{line}</div>;
         }
       });
     }
     
     // For other languages, just return the code as is
-    return <div className="text-white">{codeStr}</div>;
+    return <div className="text-white font-mono">{codeStr}</div>;
   };
 
   return (
-    <div className="my-4 rounded-lg overflow-hidden border border-border/20">
+    <div className="my-4 rounded-lg overflow-hidden border border-border/40 shadow-md">
       {title && (
         <div className="bg-[#1A1A1A] px-4 py-2 border-b border-border/20 flex justify-between items-center">
           <div className="flex space-x-2">
@@ -70,8 +70,8 @@ export default function CodeSnippet({ code, language, title }: CodeSnippetProps)
           </Button>
         </div>
       )}
-      <pre className="bg-[#1A1A1A] p-4 overflow-x-auto">
-        <code className="text-sm font-mono">
+      <pre className="bg-[#1A1A1A] p-4 overflow-x-auto leading-relaxed">
+        <code className="text-sm">
           {processCode(code)}
         </code>
       </pre>

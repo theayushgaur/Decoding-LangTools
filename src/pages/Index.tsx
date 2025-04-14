@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import { ArrowRight, ChevronUp, ChevronDown } from "lucide-react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/sections/HeroSection";
 import OverviewSection from "@/components/sections/OverviewSection";

@@ -19,7 +19,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-xl gradient-heading animate-pulse-slow">LLM Stack Explorer</span>
+          <span className="font-bold text-xl gradient-heading animate-pulse-slow">Decoding LangTools</span>
         </div>
         
         {/* Desktop navigation */}
