@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -184,5 +183,45 @@
   
   .hover-shine:hover::after {
     left: 125%;
+  }
+  
+  /* Retro grid styles */
+  .retro-fade {
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%);
+  }
+  
+  .retro-grid {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, var(--primary) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--primary) 1px, transparent 1px);
+    opacity: 0.2;
+  }
+  
+  .retro-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .retro-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(
+      90deg, 
+      rgba(255,255,255,0) 0%, 
+      rgba(255,255,255,0.2) 50%,
+      rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-20deg);
+    animation: shine 8s linear infinite;
+  }
+  
+  @keyframes shine {
+    0% { left: -150%; }
+    100% { left: 150%; }
   }
 }

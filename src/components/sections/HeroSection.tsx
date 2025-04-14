@@ -1,11 +1,15 @@
 
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { RetroGrid } from "@/components/ui/retro-grid";
 
 export default function HeroSection() {
   return (
-    <section className="py-20 bg-gradient-to-b from-secondary/40 to-background transition-colors duration-300">
-      <div className="container px-4 md:px-6">
+    <RetroGrid 
+      className="py-20 bg-gradient-to-b from-secondary/40 to-background transition-colors duration-300"
+      gridOpacity={0.1}
+    >
+      <div className="container px-4 md:px-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-4 md:space-y-6 max-w-3xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-bold gradient-heading leading-tight animate-pulse-slow">
             Understanding the LangChain Ecosystem
@@ -23,6 +27,6 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
-    </section>
+    </RetroGrid>
   );
 }
