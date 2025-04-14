@@ -1,22 +1,16 @@
-# Welcome to your Lovable project
+# Decoding LangTools
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/adf778b9-cbac-4978-a694-5f992a370609
+This project provides a comprehensive guide to understanding the LangChain ecosystem.
 
 ## How can I edit this code?
 
 There are several ways of editing your application.
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/adf778b9-cbac-4978-a694-5f992a370609) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -62,12 +56,10 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/adf778b9-cbac-4978-a694-5f992a370609) and click on Share -> Publish.
+You can deploy this project using platforms like Vercel, Netlify, or GitHub Pages.
 
-## Can I connect a custom domain to my Lovable project?
+## Features
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Explore the differences between LangChain, LangGraph, and LangSmith
+- Learn how to build powerful AI agents with Flutter integration
+- Interactive code examples and visualization

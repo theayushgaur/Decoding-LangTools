@@ -7,63 +7,66 @@
   :root {
     --background: 226 100% 99%;
     --foreground: 224 71.4% 4.1%;
-    
+
     --card: 0 0% 100%;
     --card-foreground: 224 71.4% 4.1%;
-    
+
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    
+
     --primary: 240 60% 60%;
     --primary-foreground: 210 20% 98%;
-    
+
     --secondary: 260 40% 90%;
     --secondary-foreground: 224 71.4% 4.1%;
-    
+
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-    
+
     --accent: 260 40% 90%;
     --accent-foreground: 224 71.4% 4.1%;
-    
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
-    
+
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 240 60% 60%;
-    
+
     --radius: 0.5rem;
   }
 
   .dark {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
-    
+
     --card: 224 71.4% 4.1%;
     --card-foreground: 210 20% 98%;
-    
+
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
-    
+
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-    
+
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    
+
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    
+
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-    
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    
+
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+  }
+  .theme {
+    --animate-grid: grid 15s linear infinite;
   }
 }
 
@@ -75,35 +78,35 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  
+
   .gradient-heading {
     @apply bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent;
   }
-  
+
   .code-block {
     @apply bg-muted rounded-lg p-3 md:p-4 overflow-x-auto text-xs md:text-sm font-mono;
   }
-  
+
   .terminal-code {
     @apply font-mono text-xs md:text-sm bg-[#1A1A1A] rounded-lg overflow-hidden;
   }
-  
+
   .terminal-success {
     @apply text-green-400;
   }
-  
+
   .terminal-info {
     @apply text-blue-400;
   }
-  
+
   .terminal-command {
     @apply text-white;
   }
-  
+
   .animate-fade-in {
     animation: fadeIn 0.8s ease forwards;
   }
-  
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
@@ -113,63 +116,63 @@
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
-  
+
   @keyframes float {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-8px); }
     100% { transform: translateY(0px); }
   }
-  
+
   .animate-pulse-slow {
     animation: pulse 3s ease-in-out infinite;
   }
-  
+
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.8; }
   }
-  
+
   .animate-slide-in-left {
     animation: slideInLeft 0.5s ease-out forwards;
   }
-  
+
   @keyframes slideInLeft {
     from { opacity: 0; transform: translateX(-20px); }
     to { opacity: 1; transform: translateX(0); }
   }
-  
+
   .animate-slide-in-right {
     animation: slideInRight 0.5s ease-out forwards;
   }
-  
+
   @keyframes slideInRight {
     from { opacity: 0; transform: translateX(20px); }
     to { opacity: 1; transform: translateX(0); }
   }
-  
+
   .animate-zoom-in {
     animation: zoomIn 0.4s ease-out forwards;
   }
-  
+
   @keyframes zoomIn {
     from { opacity: 0; transform: scale(0.97); }
     to { opacity: 1; transform: scale(1); }
   }
-  
+
   /* Interactive elements */
   .hover-lift {
     @apply transition-transform duration-300;
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-3px);
   }
-  
+
   .hover-shine {
     position: relative;
     overflow: hidden;
   }
-  
+
   .hover-shine::after {
     content: '';
     position: absolute;
@@ -181,16 +184,16 @@
     transform: skewX(-25deg);
     transition: all 0.75s ease;
   }
-  
+
   .hover-shine:hover::after {
     left: 125%;
   }
-  
+
   /* Retro grid styles */
   .retro-fade {
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%);
   }
-  
+
   .retro-grid {
     background-size: 40px 40px;
     background-image: 
@@ -198,12 +201,12 @@
       linear-gradient(to bottom, var(--primary) 1px, transparent 1px);
     opacity: 0.2;
   }
-  
+
   .retro-shine {
     position: relative;
     overflow: hidden;
   }
-  
+
   .retro-shine::after {
     content: '';
     position: absolute;
@@ -220,9 +223,20 @@
     transform: skewX(-20deg);
     animation: shine 8s linear infinite;
   }
-  
+
   @keyframes shine {
     0% { left: -150%; }
     100% { left: 150%; }
+  }
+}
+
+@theme inline {
+  @keyframes grid {
+  0% {
+    transform: translateY(-50%);
+    }
+  100% {
+    transform: translateY(0);
+    }
   }
 }

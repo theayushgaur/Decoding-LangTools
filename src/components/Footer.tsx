@@ -27,30 +27,28 @@ export default function Footer() {
           
           <div className="flex items-center justify-center gap-4 mb-6">
             <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10" asChild>
-              <a href="https://twitter.com/ayushgaur" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <a href="https://twitter.com/theayushgaur" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
                 <Twitter className="h-5 w-5 text-muted-foreground hover:text-primary" />
               </a>
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10" asChild>
-              <a href="https://linkedin.com/in/ayushgaur" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/theayushgaur/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5 text-muted-foreground hover:text-primary" />
               </a>
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10" asChild>
-              <a href="mailto:contact@ayushgaur.com" target="_blank" rel="noopener noreferrer" aria-label="Email">
+              <a href="mailto:theayushgaur@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email">
                 <Mail className="h-5 w-5 text-muted-foreground hover:text-primary" />
               </a>
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10" asChild>
-              <a href="https://github.com/ayushgaur" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <a href="https://github.com/theayushgaur" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <Github className="h-5 w-5 text-muted-foreground hover:text-primary" />
               </a>
             </Button>
           </div>
           
-          <div className="text-center text-xs text-muted-foreground">
-            © 2025 Decoding LangTools. Created for educational purposes.
-          </div>
+          
         </div>
       </div>
     </footer>
